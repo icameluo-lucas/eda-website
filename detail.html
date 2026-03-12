@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程详情 - Edmodo Academy (EDA)</title>
+    <style>
+        /* 重置和基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #262626;
+            background-color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #52C41A; /* EDA 绿色 */
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-link {
+            color: #262626;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+        }
+        
+        .nav-link.active, .nav-link:hover {
+            color: #52C41A; /* EDA 绿色 */
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 8px 12px;
+            width: 240px;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            margin-left: 8px;
+            font-size: 14px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #52C41A; /* EDA 绿色 */
+            color: #52C41A; /* EDA 绿色 */
+            background: transparent;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background-color: #f6ffed; /* 绿色背景 */
+        }
+        
+        /* 页面标题 */
+        .page-header {
+            padding: 48px 0 24px;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            color: #595959;
+            font-size: 16px;
+        }
+        
+        /* 详情页 */
+        .detail-page {
+            margin-bottom: 48px;
+        }
+        
+        .detail-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .media-section {
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .course-info {
+            background-color: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 24px;
+        }
+        
+        .instructor-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .instructor-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #52C41A; /* EDA 绿色 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .instructor-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .instructor-details p {
+            color: #8c8c8c;
+            font-size: 14px;
+        }
+        
+        .course-stats-detail {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .stat-card {
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #52C41A; /* EDA 绿色 */
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #595959;
+        }
+        
+        .action-btn {
+            background-color: #52C41A; /* EDA 绿色 */
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: #389e0d; /* 深绿色 */
+        }
+        
+        .course-description {
+            margin-top: 24px;
+        }
+        
+        .course-description h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .course-description p {
+            color: #595959;
+            line-height: 1.6;
+        }
+        
+        .syllabus {
+            background-color: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 24px;
+        }
+        
+        .syllabus h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .syllabus-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        
+        .syllabus-item:last-child {
+            border-bottom: none;
+        }
+        
+        .syllabus-title {
+            font-weight: 500;
+        }
+        
+        .syllabus-duration {
+            color: #8c8c8c;
+            font-size: 14px;
+        }
+        
+        /* 页脚 */
+        .footer {
+            background-color: #f9f9f9;
+            padding: 48px 0 24px;
+            margin-top: 48px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .footer-column h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .footer-link {
+            color: #595959;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-link:hover {
+            color: #52C41A; /* EDA 绿色 */
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid #e8e8e8;
+            color: #8c8c8c;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-bar {
+                width: 160px;
+            }
+            
+            .auth-buttons {
+                display: none;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="search.html" class="logo">EDA</a>
+            <div class="nav-links">
+                <a href="search.html" class="nav-link">首页</a>
+                <a href="search.html" class="nav-link active">课程频道</a>
+                <a href="#" class="nav-link">前沿资讯</a>
+                <a href="#" class="nav-link">共创未来</a>
+                <a href="#" class="nav-link">技能变现</a>
+            </div>
+            <div class="search-bar">
+                <span>🔍</span>
+                <input type="text" placeholder="搜索">
+            </div>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn">登录/注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 课程详情页 -->
+    <section class="container">
+        <div class="page-header">
+            <h1 class="page-title">AI剧本创作实务</h1>
+            <p class="page-subtitle">掌握AI辅助剧本创作的核心技能</p>
+        </div>
+        
+        <div class="detail-page">
+            <div class="detail-content">
+                <div class="media-section">
+                    视频播放器区域
+                </div>
+                
+                <div class="info-section">
+                    <div class="course-info">
+                        <div class="instructor-info">
+                            <div class="instructor-avatar">陈</div>
+                            <div class="instructor-details">
+                                <h4>陈俊铭</h4>
+                                <p>澳门科技大学教授</p>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats-detail">
+                            <div class="stat-card">
+                                <div class="stat-value">2092</div>
+                                <div class="stat-label">学习人数</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">课时数</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">4.8</div>
+                                <div class="stat-label">评分</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">8h</div>
+                                <div class="stat-label">预计学习时间</div>
+                            </div>
+                        </div>
+                        
+                        <button class="action-btn">开始学习</button>
+                        
+                        <div class="course-description">
+                            <h4>课程简介</h4>
+                            <p>本课程将带你深入了解AI在剧本创作中的应用，从基础概念到实际操作，帮助你掌握利用AI工具提升创作效率的技巧。课程内容涵盖AI剧本生成、角色设定、情节发展等核心要素。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="syllabus">
+                        <h3>课程大纲</h3>
+                        <div class="syllabus-item">
+                            <span class="syllabus-title">第1课：AI剧本创作基础</span>
+                            <span class="syllabus-duration">30分钟</span>
+                        </div>
+                        <div class="syllabus-item">
+                            <span class="syllabus-title">第2课：高级技巧与实战</span>
+                            <span class="syllabus-duration">45分钟</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>学习新知识</h4>
+                    <div class="footer-links">
+                        <a href="search.html" class="footer-link">热门</a>
+                        <a href="search.html" class="footer-link">专业提升</a>
+                        <a href="search.html" class="footer-link">职场技能</a>
+                        <a href="search.html" class="footer-link">社会教育</a>
+                        <a href="search.html" class="footer-link">兴趣爱好</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>产品与服务</h4>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">学习目标百科</a>
+                        <a href="#" class="footer-link">EDA新视听创作大赛</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>法律与合规</h4>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">用户协议</a>
+                        <a href="#" class="footer-link">隐私政策</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>关注我们</h4>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">微信公众号</a>
+                        <a href="#" class="footer-link">联系我们</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                Copyright © 2022 EDA All Rights Reserved. 闽ICP备12022411号-7 联系方式：edacn@101.com
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 大纲项点击
+            const syllabusItems = document.querySelectorAll('.syllabus-item');
+            syllabusItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    alert('跳转到对应视频时间点');
+                });
+            });
+            
+            // 导航链接激活
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
